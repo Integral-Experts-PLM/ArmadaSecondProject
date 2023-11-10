@@ -1,0 +1,57 @@
+<style>
+    .dropdown {
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #d1d1d1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<div class="navbar">
+    <div class="dropdown">
+        <a href="#" class="custom-link" onclick="toggleDropdown()">FRACAS Incidents</a>
+        <div id="incidentDropdown" class="dropdown-content">
+            <a href="{% url 'create_incident' %}">Create Incident</a>
+            <a href="{% url 'view_all_incidents' %}">View Incidents</a>
+            <a href="{% url 'view_maintenance_logs' %}">View Maintenace Logs</a>
+            <a href="{% url 'view_operating_times' %}">View Operating Times</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDropdown() {
+        var dropdown = document.getElementById("incidentDropdown");
+        dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.custom-link')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.style.display === 'block') {
+                    openDropdown.style.display = 'none';
+                }
+            }
+        }
+    }
+</script>

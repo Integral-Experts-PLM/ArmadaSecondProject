@@ -1,0 +1,98 @@
+body {
+  background-color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.navbar {
+  width: 100%;
+  background-color: #343a41;
+  padding: 12px;
+  font-size: medium;
+}
+
+.custom-link {
+  text-decoration: none;
+  padding: 12px;
+  transition: background-color 0.3s;
+  color: #989f9f;
+}
+
+.custom-link:hover {
+  background-color: #4b5057;
+}
+
+.state-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.main-input-container {
+  width: 100%;
+  border: 1px solid gray;
+  padding: 25px 15px 15px 15px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.title-input-container {
+  font-size: 16px;
+  color: black;
+  position: absolute;
+  top: -14px;
+  padding: 4px;
+  background-color: white;
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.input-label {
+  text-align: end;
+  width: 120px;
+  margin-right: 10px;
+}
+
+.input-box {
+  width: 250px;
+  background-color: #f6f6f6;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.button {
+  padding: 5px 40px;
+  font-size: small;
+  text-align: center;
+  border: 1px solid #989f9f;
+  border-radius: 2px;
+  background-color: #f6f6f6;
+  color: #000000;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  cursor: pointer;
+}
+
+/* Style the custom checkbox */
+input[type="checkbox"]:checked {
+  background-color: #343a41;
+  border: 2px solid #000000;
+}
