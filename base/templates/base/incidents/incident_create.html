@@ -3,131 +3,203 @@
 {% load static %}
 {% block content %}
 <form method="POST">
-    {% csrf_token %}
-    <div
-    style="display: flex; flex-direction: column; align-items: center; margin: 0px 20px 0px 20px;">
+  {% csrf_token %}
+  <div style="display: flex; flex-direction: column; align-items: center; margin: 0px 20px 0px 20px;">
     <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
+      <div class="main-input-container">
+        <h3 class="title-input-container">Crear Nuevo Incidente</h3>
 
-<div class="main-input-container">
-  <h3 class="title-input-container">Create Incident</h3>
-  <div style="display: flex; justify-content: space-between;">
-    <div>
-      <div class="input-container">
-        <label class="input-label">Project:</label>
-        <input type="text" value="{{ project_name }}" class="input-box" name="project" disabled />
-        <input type="hidden" value="{{ project_id }}" class="input-box" name="project_id" disabled />
-      </div>
-      <div class="input-container">
-        <label class="input-label">System:</label>
-        <input type="text" value="{{ system_name }}" class="input-box" name="system" disabled />
-        <input type="hidden" value="{{ system_id }}" class="input-box" name="system_id" disabled />
-      </div>
-      <div class="input-container">
-        <label class="input-label">Configuration:</label>
-        <input type="text" value="{{ configuration_name }}" class="input-box" name="configuration" disabled />
-        <input type="hidden" value="{{ configuration_id }}" class="input-box" name="configuration_id" disabled />
-      </div>
-      <div class="input-container">
-        <label class="input-label">Item:</label>
-        {% if not tree_item_name %}
-        <select id="tree_item_name" name="tree_item_name" class="input-box">
-          <option value="">Select Item</option>
-          {% for item in tree_items_data %}
-          <option value="{{ item.Name }}" data-id="{{ item.ID }}">{{ item.Name }}</option>
-          {% endfor %}
-        </select>
-        <input type="hidden" id="tree_item_id" name="tree_item_id" class="input-box">
-        <script>
-          // JavaScript to set the hidden input's value when an option is selected
-          document.getElementById('tree_item_name').addEventListener('change', function () {
-            var selectedOption = this.options[this.selectedIndex];
-            var treeItemIdInput = document.getElementById('tree_item_id');
-            treeItemIdInput.value = selectedOption.getAttribute('data-id');
-            console.log('treeItemIdInput', treeItemIdInput.value)
-          });
-        </script>
-        {% else %}
-        <input type="text" value="{{ tree_item_name }}" id="tree_item_name" name="tree_item_name" class="input-box">
-        <input type="hidden" value="{{ tree_item_id }}" id="tree_item_id" name="tree_item_id" class="input-box">
-        {% endif %}
-      </div>
-      <div class="input-container">
-        <label class="input-label">Name:</label>
-        <input type="text" value="{{ create_incident_form.name }}" class="input-box" name="person_incident_entry" />
-      </div>
-      <div class="input-container">
-        <label class="input-label" for="user_text22_failure_detection_situation">Equipment Failure Detection
-          Situation:</label>
-        <select id="user_text22_failure_detection_situation" name="user_text22_failure_detection_situation"
-          class="input-box">
-          <option value="">Select Item</option>
-          <option value="working">Working</option>
-          <option value="paused">Paused</option>
-          <option value="maintenance">Maintenance</option>
-        </select>
-      </div>
-    </div>
-    <div
-      style="height: 100%; display: flex; flex-direction: column ; align-items: center; justify-content: space-between;">
-      <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: 214px;">
-    </div>
-    <div>
-      <div class="input-container">
-        <label class="input-label" for="user_text23_failure_buque_situation">Buque Failure Detection Situation:</label>
-        <select id="user_text23_failure_buque_situation" name="user_text23_failure_buque_situation" class="input-box">
-          <option value="">Select Item</option>
-          <option value="docked">Docked</option>
-          <option value="navigating">Navigating</option>
-          <option value="immobilized">Immobilized</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label class="input-label" for="user_text24_failure_effect_item">Equipment Failure Effect:</label>
-        <select id="user_text24_failure_effect_item" name="user_text24_failure_effect_item" class="input-box">
-          <option value="">Select Item</option>
-          <option value="inoperative">Inoperative</option>
-          <option value="degraded">Degraded</option>
-          <option value="non effect">Non Effect</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label class="input-label" for="user_text25_failure_evidence">Failure Evidence:</label>
-        <select id="user_text25_failure_evidence" name="user_text25_failure_evidence" class="input-box">
-          <option value="">Select Item</option>
-          <option value="visible">Visible</option>
-          <option value="hidden">Hidden</option>
-        </select>
-      </div>
-      <div class="input-container">
-        <label class="input-label">Incident Date:</label>
-        <input type="date" value="{{ create_incident_form.occurrence_date.value|default:''|date:'Y-m-d' }}"
-          class="input-box" name="occurrence_date" id="occurrence_date" />
-      </div>
-      <div class="input-container">
-        <label class="input-label">Incident Time:</label>
-        <input type="text" value=""
-          class="input-box" name="occurrence_time" id="occurrence_time" />
-      </div>
-      <div class="input-container">
-        <label class="input-label">User Failure Detection:</label>
-        <input type="text" value="{{ create_incident_form.user }}" class="input-box"
-          name="user_text26_user_failure_detection" />
-      </div>
-    </div>
-  </div>
-  <div class="input-container" style="width: 100%;">
-    <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
-    <!-- <textarea name="remarks_close_out" rows="6" class="input-box" style="width: 100%; text-align: left;" value=""> -->
-    <textarea name="description_incident" rows="6" class="input-box" style="width: 100%; text-align: left;" value="">
+        <div style="display: flex; justify-content: center; width: 100%;">
+
+          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
+            <div class="input-container">
+              <label for="project_id" class="input-label">Clase</label>
+              <select id="project_id" name="project_id" class="input-box">
+                <option value="">Selecione Clase</option>
+                {% for project in allProjects.value %}
+                <option value="{{ project.ID }}">{{ project.Name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <input type="hidden" id="project_name" name="project_name" value="">
+            <div class="input-container">
+              <label class="input-label">Serie</label>
+              <select id="system_id" name="system_id" class="input-box" disabled>
+                <option value="">Selecione Serie</option>
+              </select>
+            </div>
+            <input type="hidden" id="system_name" name="system_name" value="">
+            <div class="input-container">
+              <label class="input-label">Buque</label>
+              <select id="configuration_id" name="configuration_id" class="input-box" disabled>
+                <option value="">Selecione Buque</option>
+              </select>
+              <input type="hidden" id="configuration_name" name="configuration_name" value="">
+            </div>
+            <div
+              style="display: flex; justify-content: end; margin-bottom: 10px; border: 1px solid gray; padding: 10px 10px 0 0;">
+              <div>
+                <div class="input-container">
+                  <label class="input-label" style="width: auto;">MFD</label>
+                  <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+                  <input type="hidden" value="" class="input-box" name="" disabled />
+                </div>
+                <div class="input-container">
+                  <label class="input-label" style="width: auto;">HSC</label>
+                  <input type="text" value="" class="input-box" style="width: 143px;" name="">
+                  <input type="hidden" value="" class="input-box" name="" disabled />
+                </div>
+              </div>
+              <div style="display: flex; padding-bottom: 10px; margin-left: 10px;">
+                <button onclick="" class="button" style="padding-left: 5px; padding-right: 5px;">Asociar HSC</button>
+              </div>
+            </div>
+            <div class="input-container">
+              <label class="input-label">Nombre del equipo afectado por fallo</label>
+              <input type="text" value="{{ create_incident_form.name }}" class="input-box"
+                name="person_incident_entry" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" for="user_text22_failure_detection_situation">Situación del equipo a la
+                deteccion
+                del fallo</label>
+              <select id="user_text22_failure_detection_situation" name="user_text22_failure_detection_situation"
+                class="input-box">
+                <option value="">Selecione situación</option>
+                <option value="working">Funcionamiento</option>
+                <option value="paused">Reposo</option>
+                <option value="maintenance">Mantenimiento</option>
+              </select>
+            </div>
+            <div class="input-container">
+              <label class="input-label" for="user_text23_failure_buque_situation">Situación del buque a la detección
+                del
+                fallo</label>
+              <select id="user_text23_failure_buque_situation" name="user_text23_failure_buque_situation"
+                class="input-box">
+                <option value="">Selecione situación</option>
+                <option value="docked">En puerto</option>
+                <option value="navigating">En navegación</option>
+                <option value="immobilized">En inmovilización</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="height: 300px; display: flex; align-items: center; justify-content: center; margin: 0 60px 0 60px;">
+            <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: 100%;">
+          </div>
+
+          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
+            <div class="input-container" style="justify-content: flex-start;">
+              <select id="user_text24_failure_effect_item" name="user_text24_failure_effect_item" class="input-box">
+                <option value="">Selecione efecto</option>
+                <option value="inoperative">Equipo inoperativo</option>
+                <option value="degraded">Equipo degradado</option>
+                <option value="non effect">Sin efecto sobre equipo</option>
+              </select>
+              <label class="input-label" for="user_text24_failure_effect_item" style=" margin-left: 10px;">Efecto del
+                fallo sobre el equipo</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <select id="user_text25_failure_evidence" name="user_text25_failure_evidence" class="input-box">
+                <option value="">Selecione evidencia</option>
+                <option value="visible">Visible</option>
+                <option value="hidden">Oculto</option>
+              </select>
+              <label class="input-label" style=" margin-left: 10px;" for="user_text25_failure_evidence">Evidencia del
+                fallo</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="date" value="{{ create_incident_form.occurrence_date.value|default:''|date:'Y-m-d' }}"
+                class="input-box" name="occurrence_date" id="occurrence_date" />
+              <label class="input-label" style=" margin-left: 10px;">Fecha en la que se produce o se detecta el
+                fallo</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="text" value="" class="input-box" name="occurrence_time" id="occurrence_time" />
+              <label class="input-label" style=" margin-left: 10px;">Hora en la que se procuce o detecta el
+                fallo</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="text" value="{{ create_incident_form.user }}" class="input-box"
+                name="user_text26_user_failure_detection" />
+              <label class="input-label" style=" margin-left: 10px;">Persona que detecta el fallo</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="text" value="" class="input-box" name="" />
+              <label class="input-label" style=" margin-left: 10px;">Instalación afectada</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="text" value="" class="input-box" name="" />
+              <label class="input-label" style=" margin-left: 10px;">Local</label>
+            </div>
+            <div class="input-container" style="justify-content: flex-start;">
+              <input type="text" value="" class="input-box" name="" />
+              <label class="input-label" style=" margin-left: 10px;">Nº Parte de mantenimiento</label>
+            </div>
+          </div>
+          <!-- <div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Hora de funcionamiento totales del equipo al
+                fallo:</label>
+              <input type="number" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Numero ciclos de funcionamiento totales del equipo
+                al fallo:</label>
+              <input type="number" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Horas de funcionamiento del equipo al fallo desde
+                última acción
+                correctiva:</label>
+              <input type="number" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Numero de ciclos de funcionamiento totales del
+                equipo al fallo desde última acción
+                correctiva:</label>
+              <input type="numero" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Horas de funcionamiento del equipo al fallo desde
+                último mantenimiento
+                planificado:</label>
+              <input type="number" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="text-wrap: nowrap;">Funcionamiento totales del equipo al fallo desde
+                último mantenimiento
+                planificado:</label>
+              <input type="numero" value="" class="input-box" name="" />
+            </div>
+          </div> -->
+        </div>
+
+        <div class="input-container" style="width: 100%; margin-top: 20px;">
+          <label class="input-label" style="width: 140px; text-align: right;">Descripción del fallo</label>
+          <textarea name="description_incident" rows="6" class="input-box" style="width: 100%; text-align: left;"
+            value="">
   </textarea>
+        </div>
+
+        <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
+          <label class="input-label" style="width: 122px; text-align: right;">Attachments</label>
+          <input type="file"
+            value="{% if incident_data %}{{ incident_data.AttachmentsIncidents }}{% else %}{{ incident_details_form.attachments_incidents.value|default:'' }}{% endif %}"
+            class="input-box" style="width: 280px;" name="attachments_incidents" />
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+    <div style="display: flex; justify-content: center; padding-bottom: 20px;">
+      <input type="submit" value="Crear Incidente" class="button">
+    </div>
   </div>
-</div>
-</div>
-<div style="display: flex; justify-content: center; padding-bottom: 20px;">
-    <input type="submit" value="Create Incident" class="button">
-</div>
-</div>
-
 </form>
-
+<script src="{% static 'js/dynamicSelectors.js' %}"></script>
 {% endblock %}

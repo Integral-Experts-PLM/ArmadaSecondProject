@@ -1,0 +1,172 @@
+{% extends 'index.html' %}
+<!-- {% load custom_filters %}  -->
+
+{% block content %}
+<style>
+    .container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .table-container {
+        flex: 1;
+        overflow: auto;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th,
+
+    td {
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table td {
+        text-align: left;
+        white-space: wrap;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    thead {
+        position: sticky;
+        top: 0;
+    }
+
+    th {
+        background-color: #e4eef3;
+        vertical-align: middle;
+        overflow: hidden;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+        /* Light gray for even rows */
+    }
+
+    tr:nth-child(odd) {
+        background-color: white;
+        /* White for odd rows */
+    }
+
+    .selected {
+        background-color: yellow;
+    }
+</style>
+
+<div class="container">
+    <div class="table-container">
+        <table>
+            <thead>
+                {% include 'base/incidents/table_header.html' %}
+            </thead>
+            <tbody>
+                {% for incident in page_obj %}
+                {% with row_number=forloop.counter|add:start_number %}
+                {% include 'base/incidents/table_row.html' %}
+                {% endwith %}
+                {% empty %}
+                <tr>
+                    <td colspan=3 style="text-align: center;">No hay incidentes para mostrar</td>
+                    <!-- Reemplaza colspan con el número de columnas -->
+                </tr>
+                {% endfor %}
+                <tr style="background-color: #ffce55; height: 10px;">
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}">&laquo;
+                primera</a>
+            <a
+                href="?page={{ page_obj.previous_page_number }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}">anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+            <a
+                href="?page={{ page_obj.next_page_number }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}">siguiente</a>
+            <a
+                href="?page={{ page_obj.paginator.num_pages }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}">última
+                &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+<script>
+    // Initialize selectedIncidentId with the default or initial value
+    let selectedIncidentId = document.getElementsByClassName('clickable-row')[0].getAttribute('value');
+    console.log("selectedIncidentId", selectedIncidentId)
+
+    // Function to get the CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === name + '=') {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const rows = document.querySelectorAll('.clickable-row');
+
+    rows.forEach(row => {
+        row.addEventListener('click', () => {
+            const clickedIncidentId = row.getAttribute('value');
+            selectedIncidentId = clickedIncidentId;
+            console.log("selectedIncidentId", selectedIncidentId)
+            // Remove 'selected' class from all rows
+            rows.forEach(r => r.classList.remove('selected'));
+            // Mark the clicked row as selected
+            row.classList.add('selected');
+
+            // Send the selectedIncidentId to your Django view if needed
+            fetch('/get-maintenance-logs/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: selectedIncidentId,
+            }).then(handleResponse)
+                .catch(handleError);
+        })
+
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error('Request failed');
+            }
+            console.log('Request successful');
+            window.location.href = "{% url 'view_maintenance_logs' %}";
+        }
+
+        function handleError(error) {
+            console.error('Error:', error);
+        }
+    });
+</script>
+{% endblock %}

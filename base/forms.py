@@ -1,19 +1,14 @@
 from django.forms import ModelForm
-from .models import Incident, MaintenanceLog, OperatingTime
+from .models import CreateIncident, MaintenanceLog
 
-# 'incident_ID' must be exclude because it is asign automaticaly
-class IncidentForm(ModelForm):
+class CreateIncidentForm(ModelForm):
     class Meta:
-        model = Incident
-        exclude = ['identifier', 'project_id', 'system_id', 'configuration', 'system_tree_item', 'name', 'user_text26_user_failure_detection', 'occurrence_time']
+        model = CreateIncident
+        exclude = ['user_text22_failure_evidence', 'user_text23_failure_evidence', 'user_text24_failure_evidence', 'user_text25_failure_evidence',
+                   'identifier', 'system_tree_item', 'name', 'user_text26_user_failure_detection', 'occurrence_time', 'occurrence_date']
+
 
 class MaintenanceLogForm(ModelForm):
     class Meta:
         model = MaintenanceLog
         exclude = ['incident_ID', 'maintenance_log_identifier']
-
-# 'operational_time' must be exclude because it not editable
-class OperatingTimeForm(ModelForm):
-    class Meta:
-        model = OperatingTime
-        exclude = ['operational_time']

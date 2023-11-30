@@ -1,9 +1,9 @@
 from django.db import models
 
-class Incident(models.Model):
+class CreateIncident(models.Model):
     project_id = models.CharField(max_length=200)
     system_id = models.CharField(max_length=200)
-    configuration = models.CharField(max_length=200,)
+    configuration_id = models.CharField(max_length=200,)
     system_tree_item = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
     user_text22_failure_detection_situation = models.CharField(max_length=200, null=True, blank=True)
@@ -33,14 +33,4 @@ class MaintenanceLog(models.Model):
 
     def __str__(self):
         return str(self.maintenance_log_identifier)
-
-class OperatingTime(models.Model):
-    identifier = models.CharField(max_length=200)
-    configuration = models.CharField(max_length=200)
-    user_text1_tail_number = models.CharField(max_length=200)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    multiplicative_djustment = models.IntegerField(default=1, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.identifier)
+    

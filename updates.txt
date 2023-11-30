@@ -1,0 +1,87 @@
+    - all aplication done in spanish
+- we will get an Armada enviorement with their full project to develope our part
+- user will have different permissions to access different parts of this new adevelopment
+    user permisssions are alredy defined in Armada all
+- when new inident created, send email to whoever matters the issue
+    Armada app aleady has this functionality, we have to implement in our part of the project
+- styles with bootstrap, if there are not conflict, keep our styles (pure css)
+- django version we will see when we get the project from Armada
+
+- We will build a "home" page with a navbar
+    this bar will contain only one buttom call "Windchill"
+        with 3 options
+            "Crear nuevo incident"
+            "Buscar Incident"
+            "Importar datos parte de mantenimiento"
+
+- DROPDOWN - Crear nuevo incidente
+    El usuario deberá escribir en un campo de texto el MFD. Al lado habrá un botón de Asociar HSC.
+    Al pulsar este botón, se ejecutará un servicio, provisto por Atavia, que buscará la correspondencia del MFD con el HSC.
+    En caso de no encontrar un HSC asociado, devolverá un genérico.
+    En este mismo servicio, Atavia proverá los siguientes datos para rellenar la incidencia en Windchill:
+        - Horas de Funcionamiento Totales del Equipo al Fallo
+        - Nº Ciclos de Funcionamiento Totales del Equipo al Fallo
+        - Horas de Funcionamiento del Equipo al Fallo desde última Acción Correctiva
+        - Nº Ciclos de Funcionamiento Totales del Equipo al Fallo desde última Acción Correctiva
+        - Horas de Funcionamiento del Equipo al Fallo desde último Mantenimiento Planificado
+        - Nº Ciclos de Funcionamiento Totales del Equipo al Fallo desde último Mantenimiento Planificado
+
+    A partir del HSC, la ventana de creación deberá mostrar al usuario los campos (sólo lectura), que estarán en la tabla de System tree Item de Windchill:
+        - Nombre del equipo afectado por el fallo
+        - Tipo ECS
+        - Instalación afectada
+        - Local
+
+    Una vez el usuario haya rellenado los campos, le dará al botón de crear Incidencia.
+    Si el usuario no introduce uno de los campos obligatorios (incluyendo el MFD), se mostrará un mensaje de error.
+
+    Al crear la incidencia, Atavia mandará un correo al usuario creador, y al grupo de usuarios que se defina en Atavia, que serán los que completen la acción en Windchill.
+
+- DROPDOWN - Buscar incidente
+    *project = clase (submarino s80x)
+    *system = serie (each project has one system as best pratics - also, sumarino s80x)
+    configuration = buque (fisic item to manage the incidents)
+    item = HSC (tree of items to manage)
+
+    - crear filtros de busqueda ANTES de visualizar incidencias
+        "Clase" (equivalente a proyecto en windchill)
+        "Serie" (equivalente a systema en windchill)
+        "Buque" (equivalente a configuracion en windchill)
+        "HSC" (dropdown con todos los HSC - items)
+        "ID" (id de la incidencia)
+        "Usuario creador"
+
+        Después el usuario le dará al botón Buscar y aparecerá una ventana con la tabla de los Incidentes que cumplan con los requisitos anteriores.
+        En esta ventana se podrán filtar las columnas como en otras tablas de Atavia
+            
+    - parameters to show will be as already code in the "creation" of an incident and few more - see image params_creacion_incidencia
+        name: is in Fracas json but it doent call "name" - to be review
+        user failure detection: it the actual user from Atavia, we will connect it when we get the Atavia project
+        incident time: it will be an string separate from incident date
+       FR- attachments: have to be create for attachments, for the momment will be images but for the future can be anything (focus on images)
+    - create pagination.
+        we will have thousands incidents
+        if it doesnt afect performance, call all incidents and create a pagination on the frontend
+        if it affect performance, call incidents by "blocks" in the backend, pagination on the backend
+
+- DROPDOWN - Importar datos parte de mantenimiento
+    - it will be view only
+    Maintenance Logs = Acciones correctivas
+    Las acciones correctivas son por incidencia, la busqueda seria igual a la de buscar incidentes salvo del HSC
+    La diferencia es que ademas de buscar se puede elegir la incidencia para mirar el "maintenace logs"
+
+    Después el usuario le dará al botón Buscar y aparecerá una ventana con la tabla de los Incidentes que cumplan con los requisitos anteriores.
+    En esta ventana se podrán filtar las columnas como en otras tablas de Atavia.
+    En esta tabla el usuario seleccionará una incidencia y le dará al botón de mostrar Acciones Correctivas.
+
+    Esto llevará al usuario a otra ventana en la que se mostrarán las Acciones Correctivas (Maintenance log) de ese Incidente.
+    El usuario seleccionará una de ellas y le dará al botón Importar Parte de Mantenimiento. 
+
+    Al darle al botón, consumirá un servicio provisto por Atavia (Armada tendra que crear esos servicios y nosotros solo los llamamos - pendente de Armada),
+    el cual devolverá los siguientes atributos, que se rellenarán de forma automática en Windchill en la Acción Correctiva (Maintenance Log) correspondiente:
+        - Nº Personas que realizan la Acción Correctiva
+        - Horas/Hombre de la Acción Correctiva
+        - Tiempo Total de la Acción Correctiva
+        - Coste/Hora Personal que realiza la Acción Correctiva
+        - Coste Material asociado a la Acción Correctiva
+        - Coste Total (Horas + Materiales) asociado a la Acción Correctiva

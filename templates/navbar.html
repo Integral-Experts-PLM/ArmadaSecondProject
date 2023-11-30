@@ -26,12 +26,11 @@
 
 <div class="navbar">
     <div class="dropdown">
-        <a href="#" class="custom-link" onclick="toggleDropdown()">FRACAS Incidents</a>
+        <a href="#" class="custom-link" onclick="toggleDropdown()">Windchill</a>
         <div id="incidentDropdown" class="dropdown-content">
-            <a href="{% url 'create_incident' %}">Create Incident</a>
-            <a href="{% url 'view_all_incidents' %}">View Incidents</a>
-            <a href="{% url 'view_maintenance_logs' %}">View Maintenace Logs</a>
-            <a href="{% url 'view_operating_times' %}">View Operating Times</a>
+            <a href="{% url 'create_incident' %}">Crear Nuevo Incidente</a>
+            <a href="{% url 'search_incidents' %}">Buscar Incidente</a>
+            <a href="{% url 'search_incidents_logs' %}">Importar Dados de Mantenimiento</a>
         </div>
     </div>
 </div>
