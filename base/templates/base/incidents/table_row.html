@@ -3,12 +3,10 @@
     <td>{{ row_number }}</td>
     <td>{{ incident.ID }}</td>
     <td>{{ incident.Identifier }}</td>
-    <td>{{ incident.IncidentUser }}</td>
-    <td>{{ incident.DateStart|format_datetime}}</td>
+    <td>{{ incident.IncidentUser|extract_after_colon }}</td>
+    <td>{{ incident.DateIncident|format_datetime}}</td>
+    <td>{{ incident.DateEndCO|format_datetime}}</td>
+    <td>{{ incident.IncUserText2|extract_after_colon }}</td>
+    <td>{{ incident.IncidentDescription }}</td>
     <td>{{ incident.TreeName }}</td>
-    <td>{{ incident.DateStart|format_datetime}}</td>
-    <td>{{ incident.Closed }}</td>
-    <td>{{ incident.Relevant }}</td>
-    <td>{{ incident.Chargeable }}</td>
-    <td>{{ incident.Approval }}</td>
 </tr>

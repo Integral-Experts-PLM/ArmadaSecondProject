@@ -1,3 +1,4 @@
+from datetime import datetime
 import requests
 from django.http import JsonResponse
 from django.conf import settings
@@ -5,6 +6,8 @@ from django.shortcuts import render, redirect
 from ...db_queries import get_all_incidents, get_tree_name
 from ...web_services import get_projects
 from django.core.paginator import Paginator
+from ...templatetags.custom_filters import format_datetime
+import re
 
 
 def search_incidents(request, message=None):
@@ -21,38 +24,20 @@ def view_incidents(request):
     # Recoger parámetros de filtrado
     filter_column = request.GET.get('filter_column')
     filter_value = request.GET.get('filter_value')
-    print(filter_column)
-    print(filter_value)
 
     if set_id:
-        incidents_query = get_all_incidents(set_id, configuration_id, tree_id)
-        if incidents_query is None:
-            incidents_query = [] # para que incidents_data siempre sea una secuencia iterable incluso si está vacía antes de pasarla al Paginator. 
-
-        # Convertir QuerySet a una lista de diccionarios
-        incidents_data = [incident_to_dict(incident) for incident in incidents_query]
-
-        print(incidents_data)
-        # Aplicar filtro en la vista
-        if filter_column and filter_value:
-            incidents_data = [incident for incident in incidents_data if str(incident.get(filter_column, '')).lower() == filter_value.lower()]
-
-        # Filtrar los datos de incidentes
-        # if filter_column and filter_value:
-        #     filtered_incidents = []
-        #     for incident in incidents_data:
-        #         # Obtener el valor del atributo del incidente
-        #         incident_value = getattr(incident, filter_column, '')
-        #         # Comprobar si el valor coincide con el filtro
-        #         if str(incident_value).lower() == filter_value.lower():
-        #             filtered_incidents.append(incident)
-        #     incidents_data = filtered_incidents
-
+        incidents_data = get_all_incidents(set_id, configuration_id, tree_id)
+        if incidents_data is None:
+            incidents_data = [] # para que incidents_data siempre sea una secuencia iterable incluso si está vacía antes de pasarla al Paginator. 
+       
         # Añadir el nombre del TreeItem a cada incidencia
-        # for incident in incidents_data:
-        #     incident.TreeName = incident.TreeID.Name
+        for incident in incidents_data:
+            incident.TreeName = incident.TreeID.Name
 
-        
+        # Filtrar incidents_data basándose en filter_column y filter_value
+        if filter_column and filter_value:
+            incidents_data = filter_incidents(incidents_data, filter_column, filter_value)
+
         paginator = Paginator(incidents_data, 50)  # 50 incidentes por página
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -63,27 +48,26 @@ def view_incidents(request):
     else:
         message = 'Clase y Serie son campos obligatorios'
         return search_incidents(request, message=message)
+    
+def filter_incidents(incidents, column, value):
+    filtered_incidents = []
 
+    for incident in incidents:
+        attribute_value = getattr(incident, column, None)
 
-def incident_to_dict(incident):
-    # Implementa la conversión del objeto 'Incident' a un diccionario
-    # Esto puede incluir la conversión de objetos relacionados y campos especiales
-    return {
-        'ID': incident.ID,
-        'Identifier': incident.Identifier,
-        'DateStart': incident.DateStart.strftime("%Y-%m-%d %H:%M:%S") if incident.DateStart else None,
-        'SetID': incident.SetID,
-        'ConfigurationID': incident.ConfigurationID,
-        'TreeName': incident.TreeID.Name if incident.TreeID else None,
-        # Agrega otros campos necesarios
-    }
+        # Comprobar si el atributo es una instancia de datetime
+        if isinstance(attribute_value, datetime):
+            # Formatear la fecha y comparar
+            if format_datetime(attribute_value) == value:
+                filtered_incidents.append(incident)
+        else:
+            pattern = r'~[^:]+:.+'  # Patrón para ~texto:texto (~SEVERITY:CRITICAL)
+            if isinstance(attribute_value, str) and re.match(pattern, attribute_value):
+                # Tomar el texto después de los dos puntos
+                attribute_value = attribute_value.split(':', 1)[1]
 
-def viewIncident(request):
-    if request.method == 'POST':
-        incident_ID = request.body.decode('utf-8')
-        request.session['incident_ID'] = incident_ID
-        globalContext = request.session.get('context_data', {})
-        globalContext['selectedIncidentId'] = incident_ID
-        json_data = globalContext['incidents_data']
-        # Set safe to False for non-dict objects
-        return JsonResponse(json_data, safe=False)
+            # Para otros tipos de datos, realizar una comparación directa
+            if str(attribute_value).lower() == value.lower():
+                filtered_incidents.append(incident)
+
+    return filtered_incidents

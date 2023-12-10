@@ -1,6 +1,5 @@
 from django import template
 from datetime import datetime
-import re
 
 register = template.Library()
 
@@ -12,7 +11,7 @@ register = template.Library()
 #     except (ValueError, AttributeError):
 #         return ''
 
-@register.filter
+# @register.filter
 def format_datetime(value): 
      # Si 'value' es una instancia de datetime (proviene de la BBDD), formatea como DD/MM/YYYY
     if isinstance(value, datetime):
@@ -28,6 +27,8 @@ def format_datetime(value):
             pass
     # En cualquier otro caso, o si hay un error, retorna una cadena vacía
     return ''
+
+register.filter('format_datetime', format_datetime)
 
 @register.filter
 def extract_after_colon(value):

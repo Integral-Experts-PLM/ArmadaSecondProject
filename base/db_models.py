@@ -12,11 +12,14 @@ class TreeItem(models.Model):
 class Incident(models.Model):
     ID = models.AutoField(primary_key=True)  # ID (PK, int, not null)
     Identifier = models.CharField(max_length=255, blank=True, null=True)  # Identifier (nvarchar(255), null)
-    DateStart = models.DateTimeField(null=True)
+    DateIncident = models.DateTimeField(null=True)
+    DateEndCO = models.DateTimeField(null=True)
+    IncidentDescription = models.CharField(max_length=255, blank=True, null=True)
     SetID = models.IntegerField(null=True)
     ConfigurationID = models.IntegerField(null=True)
     TreeID = models.ForeignKey(TreeItem, on_delete=models.SET_NULL, null=True, blank=True, db_column='TreeID')
     IncidentUser = models.CharField(max_length=255, blank=True, null=True)
+    IncUserText2 = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False  # Indica que Django no debe gestionar la creación, modificación ni eliminación de la tabla correspondiente en la base de datos

@@ -105,6 +105,42 @@
         background-color: #45a049;
     }
 
+    /* Estilos para el paginador */
+    .pagination {
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .pagination .step-links {
+        display: inline-block;
+        padding: 8px;
+        background-color: #e4eef3;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .pagination a {
+        color: #4CAF50;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 4px;
+        margin: 0 4px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .pagination a:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .pagination .current {
+        padding: 8px 12px;
+        margin: 0 4px;
+        border-radius: 4px;
+        background-color: #ffce55;
+        color: black;
+    }
+
 </style>
 
 <div class="container">
@@ -115,7 +151,10 @@
             <option value="">Seleccionar columna</option>
             <option value="ID" {% if request.GET.filter_column == "ID" %} selected {% endif %}>ID</option>
             <option value="Identifier" {% if request.GET.filter_column == "Identificador" %} selected {% endif %}>Identificador</option>
-            <option value="Fecha del fallo" {% if request.GET.filter_column == "Fecha del fallo" %} selected {% endif %}>Fecha del fallo</option>
+            <option value="IncidentUser" {% if request.GET.filter_column == "Reportado por" %} selected {% endif %}>Reportado por</option>
+            <option value="DateIncident" {% if request.GET.filter_column == "Fecha del fallo" %} selected {% endif %}>Fecha del fallo</option>
+            <option value="DateEndCO" {% if request.GET.filter_column == "Fecha del cierre" %} selected {% endif %}>Fecha del cierre</option>
+            <option value="IncUserText2" {% if request.GET.filter_column == "Severidad inicial" %} selected {% endif %}>Severidad inicial</option>
             <option value="TreeName" {% if request.GET.filter_column == "HSC" %} selected {% endif %}>HSC</option>
             <!-- Agrega aquí opciones adicionales para otras columnas -->
             <!-- ... -->
@@ -162,7 +201,7 @@
             {% endif %}
 
             <span class="current">
-                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
             </span>
 
             {% if page_obj.has_next %}
@@ -171,64 +210,7 @@
             {% endif %}
         </span>
     </div>
+    
 </div>
 
-<!-- <script>
-        // Initialize selectedIncidentId with the default or initial value
-        let selectedIncidentId = document.getElementsByClassName('clickable-row')[0].getAttribute('value');
-        console.log("selectedIncidentId", selectedIncidentId)
-        
-        // Function to get the CSRF token from cookies
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === name + '=') {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        
-        const rows = document.querySelectorAll('.clickable-row');
-        
-        rows.forEach(row => {
-            row.addEventListener('click', () => {
-                const clickedIncidentId = row.getAttribute('value');
-                selectedIncidentId = clickedIncidentId;
-                // Remove 'selected' class from all rows
-                rows.forEach(r => r.classList.remove('selected'));
-                // Mark the clicked row as selected
-                row.classList.add('selected');
-
-                // Send the selectedIncidentId to your Django view if needed
-                // fetch('/view-all-incidents/', {
-                fetch('/get-incident-data/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: selectedIncidentId,
-                }).then(handleResponse)
-                    .catch(handleError);
-            })
-
-            function handleResponse(response) {
-                if (!response.ok) {
-                    throw new Error('Request failed');
-                }
-                window.location.href = "{% url 'view_incident' %}";
-                return response.json();
-            }
-
-            function handleError(error) {
-                console.error('Error:', error);
-            }
-        });
-</script> -->
 {% endblock %}
