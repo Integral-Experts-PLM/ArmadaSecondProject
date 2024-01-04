@@ -11,6 +11,7 @@ import re
 import pandas as pd
 from django.http import HttpResponse
 from django.forms.models import model_to_dict
+from datetime import datetime
 
 
 def search_incidents(request, message=None):
@@ -42,7 +43,7 @@ def view_incidents(request):
         # in incidents_list = [convert_to_dict(incident) for incident in incidents_data]
         incidents_list = [convert_to_dict(incident) for incident in incidents_data]
         request.session['all_incidents'] = incidents_list
-        request.session['filtered_incidents'] = incidents_list
+        request.session['filtered_incidents'] = incidents_list # por si no se aplica ningún filtro 
 
         # Filtrar incidents_data basándose en filter_column y filter_value
         if filter_column and filter_value:
@@ -86,10 +87,7 @@ def filter_incidents(incidents, column, value):
     return filtered_incidents
 
 def export_incidents_to_excel(request):
-    # Retrieve your data based on the request parameters
     incidents_data = request.session.get('filtered_incidents', [])
-    print(incidents_data)
-
     df = pd.DataFrame(incidents_data)
 
     # Convert the DataFrame to an Excel file
@@ -101,12 +99,6 @@ def export_incidents_to_excel(request):
 
     return response
 
-
-# def convert_datetime(obj):
-#     if isinstance(obj, datetime):
-#         return obj.isoformat()
-#     return obj  # Return the object as is for non-datetime types
-
 def convert_to_dict(instance):
     # Create a dictionary from the model instance
     instance_dict = model_to_dict(instance)
@@ -114,6 +106,8 @@ def convert_to_dict(instance):
     # Convert datetime objects to strings
     for key, value in instance_dict.items():
         if isinstance(value, datetime):
-            instance_dict[key] = value.isoformat()
+            instance_dict[key] = value.strftime('%d/%m/%Y')
+    
+    instance_dict['HSC'] = instance.TreeName
 
     return instance_dict

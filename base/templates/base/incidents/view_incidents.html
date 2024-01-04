@@ -202,11 +202,6 @@
 
         <!-- Formulario para la exportacion a excel -->
         <form action="{% url 'export_incidents' %}" method="get" class="export-form">
-            <!-- Pass any necessary parameters as hidden inputs -->
-            <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
-            <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
-            <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
-            <!-- ... other parameters ... -->
             <button type="submit">Exportar a Excel</button>
         </form>
     </div>
