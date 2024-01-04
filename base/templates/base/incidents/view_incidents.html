@@ -62,7 +62,13 @@
         background-color: yellow;
     }
 
-    /* Estilos para el formulario */
+    .form-container {
+        display: flex; 
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+
     .filter-form {
         margin: 20px 0;
         padding: 15px;
@@ -105,6 +111,28 @@
         background-color: #45a049;
     }
 
+    .export-form {
+        margin: 0 200px;
+        padding: 15px;
+        background-color: #e4eef3;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .export-form button {
+        padding: 8px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+
+    .export-form button:hover {
+        background-color: #45a049;
+    }
+
+
     /* Estilos para el paginador */
     .pagination {
         text-align: center;
@@ -144,48 +172,60 @@
 </style>
 
 <div class="container">
-    <!-- Formulario de filtro -->
-    <form class="filter-form" method="get" action="">
-        <label for="filter_column">Filtrar por:</label>
-        <select id="filter_column" name="filter_column">
-            <option value="">Seleccionar columna</option>
-            <option value="ID" {% if request.GET.filter_column == "ID" %} selected {% endif %}>ID</option>
-            <option value="Identifier" {% if request.GET.filter_column == "Identificador" %} selected {% endif %}>Identificador</option>
-            <option value="IncidentUser" {% if request.GET.filter_column == "Reportado por" %} selected {% endif %}>Reportado por</option>
-            <option value="DateIncident" {% if request.GET.filter_column == "Fecha del fallo" %} selected {% endif %}>Fecha del fallo</option>
-            <option value="DateEndCO" {% if request.GET.filter_column == "Fecha del cierre" %} selected {% endif %}>Fecha del cierre</option>
-            <option value="IncUserText2" {% if request.GET.filter_column == "Severidad inicial" %} selected {% endif %}>Severidad inicial</option>
-            <option value="TreeName" {% if request.GET.filter_column == "HSC" %} selected {% endif %}>HSC</option>
-            <!-- Agrega aquí opciones adicionales para otras columnas -->
-            <!-- ... -->
-        </select>
 
-        <label for="filter_value">Valor:</label>
-        <input type="text" id="filter_value" name="filter_value" value="{{ request.GET.filter_value }}">
-         <!-- Incluye los demás parámetros de búsqueda existentes en el formulario -->
-         <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
-         <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
-         <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
+    <div class="form-container">
+        <!-- Formulario de filtros -->
+        <form class="filter-form" method="get" action="">
+            <label for="filter_column">Filtrar por:</label>
+            <select id="filter_column" name="filter_column">
+                <option value="">Seleccionar columna</option>
+                <option value="ID" {% if request.GET.filter_column == "ID" %} selected {% endif %}>ID</option>
+                <option value="Identifier" {% if request.GET.filter_column == "Identificador" %} selected {% endif %}>Identificador</option>
+                <option value="IncidentUser" {% if request.GET.filter_column == "Reportado por" %} selected {% endif %}>Reportado por</option>
+                <option value="DateIncident" {% if request.GET.filter_column == "Fecha del fallo" %} selected {% endif %}>Fecha del fallo</option>
+                <option value="DateEndCO" {% if request.GET.filter_column == "Fecha del cierre" %} selected {% endif %}>Fecha del cierre</option>
+                <option value="IncUserText2" {% if request.GET.filter_column == "Severidad inicial" %} selected {% endif %}>Severidad inicial</option>
+                <option value="TreeName" {% if request.GET.filter_column == "HSC" %} selected {% endif %}>HSC</option>
+                <!-- Agrega aquí opciones adicionales para otras columnas -->
+                <!-- ... -->
+            </select>
+            
+            <label for="filter_value">Valor:</label>
+            <input type="text" id="filter_value" name="filter_value" value="{{ request.GET.filter_value }}">
+            <!-- Incluye los demás parámetros de búsqueda existentes en el formulario -->
+            <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
+            <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
+            <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
+            
+            <button type="submit">Filtrar</button>
+        </form>
 
-        <button type="submit">Filtrar</button>
-        <button type="submit">Exportar a Excel</button>
-    </form>
+        <!-- Formulario para la exportacion a excel -->
+        <form action="{% url 'export_incidents' %}" method="get" class="export-form">
+            <!-- Pass any necessary parameters as hidden inputs -->
+            <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
+            <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
+            <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
+            <!-- ... other parameters ... -->
+            <button type="submit">Exportar a Excel</button>
+        </form>
+    </div>
 
-    <div class="table-container">
+        <div class="table-container">
         <table>
             <thead>
                 {% include 'base/incidents/table_header.html' %}
             </thead>
             <tbody>
                 {% for incident in page_obj %}
-                    {% with row_number=forloop.counter|add:start_number %}
-                        {% include 'base/incidents/table_row.html' %}
-                    {% endwith %}
+                {% with row_number=forloop.counter|add:start_number %}
+                {% include 'base/incidents/table_row.html' %}
+                {% endwith %}
                 {% empty %}
-                    <tr>
-                        <td colspan=3 style="text-align: center;">No hay incidentes para mostrar</td>
-                        <!-- Reemplaza colspan con el número de columnas -->
-                    </tr>
+                <tr>
+                    <td colspan=3 style="text-align: center;">No hay incidentes para mostrar</td>
+                    <!-- Reemplaza colspan con el número de columnas -->
+                </tr>
                 {% endfor %}
                 <tr style="background-color: #ffce55; height: 10px;">
                 </tr>

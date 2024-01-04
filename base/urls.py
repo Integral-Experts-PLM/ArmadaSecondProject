@@ -15,6 +15,7 @@ urlpatterns = [
     # read
     path('search-incidents', read_incidents_views.search_incidents, name='search_incidents'),
     path('view-incidents/', read_incidents_views.view_incidents, name='view_incidents'),
+    path('export_incidents/', read_incidents_views.export_incidents_to_excel, name='export_incidents'),
     # path('view-all-incidents/', read_incidents_views.viewAllIncidents, name='view_all_incidents'),
     # path('view-incident/', read_incidents_views.viewIncident, name='view_incident'),
     # path('view-maintenance-logs/', read_maintenance_logs_views.viewMaintenanceLogs, name='view_maintenance_logs'),
