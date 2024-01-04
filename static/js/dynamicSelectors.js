@@ -4,35 +4,24 @@
     const configurationIdSelect = document.getElementById('configuration_id');
     const configurationNameSelect = document.getElementById('configuration_name');
     const treeItemIdSelect = document.getElementById('tree_item_id');
+    const incidentIdSelect = document.getElementById('inc_id');
     const treeItemNameSelect = document.getElementById('tree_item_name');
 
     if (projectIdSelect) {
       projectIdSelect.addEventListener('change', handleProjectChange);
       systemIdSelect.addEventListener('change', handleSystemChange);
       configurationIdSelect.addEventListener('change', handleConfigurationChange);
-    //   treeItemIdSelect.addEventListener('change', checkFormAndSubmit);
+
       projectIdSelect.addEventListener('change', function () {
         const selectedProjectName = projectIdSelect.options[projectIdSelect.selectedIndex].text;
         document.getElementById('project_name').value = selectedProjectName;
       });
+
       systemIdSelect.addEventListener('change', function () {
         const selectedSystemName = systemIdSelect.options[systemIdSelect.selectedIndex].text;
         document.getElementById('system_name').value = selectedSystemName;
       });
     }
-
-    // function checkFormAndSubmit() {
-    //   const selectedItemName = treeItemIdSelect.options[treeItemIdSelect.selectedIndex].text;
-    //   if(selectedItemName != 'All Items') {
-    //     treeItemNameSelect.value = selectedItemName;
-    //   } else {
-    //     treeItemNameSelect.value = null;
-    //   }
-
-    //   if (projectIdSelect.value && systemIdSelect.value && configurationIdSelect.value && treeItemIdSelect.value) {
-    //     document.getElementById('incident-form').submit();
-    //   }
-    // }
 
     // Function to get the CSRF token from cookies
     function getCookie(name) {
@@ -54,7 +43,6 @@
     //   messageContainer.textContent = '';
       let selectedProjectId = projectIdSelect.value;
 
-      // Send the selectedProjectId as a string to your Django view using an AJAX request
       fetch('/get-systems/', {
         method: 'POST',
         headers: {

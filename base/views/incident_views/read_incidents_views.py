@@ -18,15 +18,17 @@ def search_incidents(request, message=None):
     
 def view_incidents(request):
     set_id = request.GET.get('system_id')
-    configuration_id = request.GET.get('configuration_id')
+    conf_id = request.GET.get('configuration_id')
     tree_id = request.GET.get('tree_item_id')
+    inc_identifier = request.GET.get('inc_identifier')
+    inc_user = request.GET.get('inc_user')
 
     # Recoger parámetros de filtrado
     filter_column = request.GET.get('filter_column')
     filter_value = request.GET.get('filter_value')
 
     if set_id:
-        incidents_data = get_all_incidents(set_id, configuration_id, tree_id)
+        incidents_data = get_all_incidents(set_id, conf_id, tree_id, inc_identifier, inc_user)
         if incidents_data is None:
             incidents_data = [] # para que incidents_data siempre sea una secuencia iterable incluso si está vacía antes de pasarla al Paginator. 
        

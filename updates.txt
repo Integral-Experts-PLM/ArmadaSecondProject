@@ -1,4 +1,4 @@
-    - all aplication done in spanish
+- all aplication done in spanish
 - we will get an Armada enviorement with their full project to develope our part
 - user will have different permissions to access different parts of this new adevelopment
     user permisssions are alredy defined in Armada all

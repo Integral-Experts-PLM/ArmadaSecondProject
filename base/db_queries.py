@@ -3,19 +3,27 @@ from .db_models import Incident, TreeItem
 import time
 
 # Obtener datos de TreeItem aprovechando la clave foránea de la tabla Incidents1
-def get_all_incidents(set_id, configuration_id=None, tree_id=None):
+def get_all_incidents(set_id, conf_id=None, tree_id=None, inc_identifier=None, inc_user=None):
     try:
          # Obtener datos de TreeItem aprovechando la clave foránea de la tabla
         queryset = Incident.objects.using('sqlserver_db').order_by('ID').select_related('TreeID')
         queryset = queryset.filter(SetID=set_id)
         
-        configuration_id = None if configuration_id == '' else configuration_id # Convertir a None si es una cadena vacía
-        if configuration_id is not None:
-            queryset = queryset.filter(ConfigurationID=configuration_id)
+        conf_id = None if conf_id == '' else conf_id # Convertir a None si es una cadena vacía
+        if conf_id is not None:
+            queryset = queryset.filter(ConfigurationID=conf_id)
         
-        tree_id = None if tree_id == '' else tree_id # Convertir a None si es una cadena vacía
+        tree_id = None if tree_id == '' else tree_id
         if tree_id is not None:
             queryset = queryset.filter(TreeID=tree_id)
+        
+        inc_identifier = None if inc_identifier == '' else inc_identifier
+        if inc_identifier is not None:
+            queryset = queryset.filter(Identifier=inc_identifier)
+        
+        inc_user = None if inc_user == '' else inc_user
+        if inc_user is not None:
+            queryset = queryset.filter(IncidentUser=inc_user)
 
         return queryset
     except Exception as e:
