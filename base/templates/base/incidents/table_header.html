@@ -1,49 +1,70 @@
 <tr>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <!-- <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="ID" value="{{ request.GET.ID }}">
+            </div>
+        </form> -->
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="ID" value="{{ request.GET.ID }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="Identifier" value="{{ request.GET.Identifier }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="IncidentUser" value="{{ request.GET.IncidentUser }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="DateIncident" value="{{ request.GET.DateIncident }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="DateEndCO" value="{{ request.GET.DateEndCO }}">
+            </div>
+        </form>
+    </th>
+
+    <th>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="IncUserText2" value="{{ request.GET.IncUserText2 }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="IncidentDescription" value="{{ request.GET.IncidentDescription }}">
+            </div>
+        </form>
     </th>
     <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
+        <form action="{% url 'view_incidents' %}" method="get">
+            <div class="filter_box">
+                <input type="text" class="filter_text" name="TreeName" value="{{ request.GET.TreeName }}">
+            </div>
+        </form>
     </th>
-    <th>
-        <div class="filter_box">
-            <input type="text" class="filter_text">
-        </div>
-    </th>
+</tr>
+
 <tr>
     <th></th>
     <th>ID</th>

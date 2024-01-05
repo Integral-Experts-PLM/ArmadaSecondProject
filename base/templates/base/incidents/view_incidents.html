@@ -50,12 +50,10 @@
 
     tr:nth-child(even) {
         background-color: #f2f2f2;
-        /* Light gray for even rows */
     }
 
     tr:nth-child(odd) {
         background-color: white;
-        /* White for odd rows */
     }
 
     .selected {
@@ -84,10 +82,10 @@
     .filter-form select,
     .filter-form button {
         margin-right: 10px;
-        margin-bottom: 0; /* Elimina los márgenes inferiores */
+        margin-bottom: 0;
     }
 
-    .filter-form label {
+    .filter-form label {    
         font-weight: bold;
     }
 
@@ -175,7 +173,7 @@
 
     <div class="form-container">
         <!-- Formulario de filtros -->
-        <form class="filter-form" method="get" action="">
+        <!-- <form class="filter-form" method="get" action="">
             <label for="filter_column">Filtrar por:</label>
             <select id="filter_column" name="filter_column">
                 <option value="">Seleccionar columna</option>
@@ -186,19 +184,16 @@
                 <option value="DateEndCO" {% if request.GET.filter_column == "Fecha del cierre" %} selected {% endif %}>Fecha del cierre</option>
                 <option value="IncUserText2" {% if request.GET.filter_column == "Severidad inicial" %} selected {% endif %}>Severidad inicial</option>
                 <option value="TreeName" {% if request.GET.filter_column == "HSC" %} selected {% endif %}>HSC</option>
-                <!-- Agrega aquí opciones adicionales para otras columnas -->
-                <!-- ... -->
             </select>
             
             <label for="filter_value">Valor:</label>
             <input type="text" id="filter_value" name="filter_value" value="{{ request.GET.filter_value }}">
-            <!-- Incluye los demás parámetros de búsqueda existentes en el formulario -->
             <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
             <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
             <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
             
             <button type="submit">Filtrar</button>
-        </form>
+        </form> -->
 
         <!-- Formulario para la exportacion a excel -->
         <form action="{% url 'export_incidents' %}" method="get" class="export-form">

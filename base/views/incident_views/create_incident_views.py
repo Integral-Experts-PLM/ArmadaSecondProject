@@ -20,7 +20,8 @@ def createIncident(request):
             configuration_id = request.POST.get('configuration_id')
 
             # TreeItem actualmente hardcodeado, se obtendrá de una lógica de Atavia
-            tree_item_id = 11068
+            # tree_item_id = 11068
+            tree_item_id = 1031
             # Create forms for the incident creation
             create_incident_details = create_incident_form.save(commit=False)
             # Define base URL

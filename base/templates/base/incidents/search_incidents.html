@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-<form id="incident-form" method="GET" action="{% url 'view_incidents' %}"
+<form id="incident-form" method="POST" action="{% url 'view_incidents' %}"
   style="display: flex; justify-content: center;">
   {% csrf_token %}
   <div class="main-input-container" style="margin-top: 30px; width: 440px;">
