@@ -1,64 +1,109 @@
-<tr>
-    <th>
-        <!-- <form action="{% url 'view_incidents' %}" method="get">
-            <div class="filter_box">
-                <input type="text" class="filter_text" name="ID" value="{{ request.GET.ID }}">
-            </div>
-        </form> -->
+{% load static %}
+
+<tr class="filter_row" style="height: 40px;">
+    <th class="filter_row">
+        <p style="color: #0e374a; font-weight: bold; text-align: center;">FILTROS</p>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="ID" value="{{ request.GET.ID }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="Identifier" value="{{ request.GET.Identifier }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="IncidentUser" value="{{ request.GET.IncidentUser }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="DateIncident" value="{{ request.GET.DateIncident }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="DateEndCO" value="{{ request.GET.DateEndCO }}">
             </div>
         </form>
     </th>
 
-    <th>
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="IncUserText2" value="{{ request.GET.IncUserText2 }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="IncidentDescription" value="{{ request.GET.IncidentDescription }}">
             </div>
         </form>
     </th>
-    <th>
+
+    <th class="filter_row">
         <form action="{% url 'view_incidents' %}" method="get">
             <div class="filter_box">
+                <select id="sortBy" name="sortBy" class="dropdown_sort_by">
+                    <option value="non_sort">NA</option>
+                    <option value="ascendente">AC</option>
+                    <option value="descendente">DC</option>
+                  </select>
                 <input type="text" class="filter_text" name="TreeName" value="{{ request.GET.TreeName }}">
             </div>
         </form>
@@ -66,14 +111,13 @@
 </tr>
 
 <tr>
-    <th></th>
-    <th>ID</th>
-    <th>Identificador</th>
-    <th>Reportado por</th>
-    <th>Fecha del fallo</th>
-    <th>Fecha del cierre</th>
-    <th>Severidad inicial</th>
-    <th>Descripción</th>
-    <th>HSC</th>
+    <th class="col-name-row"></th>
+    <th class="col-name-row">ID</th>
+    <th class="col-name-row">Identificador</th>
+    <th class="col-name-row">Reportado por</th>
+    <th class="col-name-row">Fecha del fallo</th>
+    <th class="col-name-row">Fecha del cierre</th>
+    <th class="col-name-row">Severidad inicial</th>
+    <th class="col-name-row">Descripción</th>
+    <th class="col-name-row">HSC</th>
 </tr>
-

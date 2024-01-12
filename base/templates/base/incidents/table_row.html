@@ -1,12 +1,14 @@
-{% load custom_filters %} 
+{% load static %}
+{% load custom_filters %}
+
 <tr class="clickable-row" value="{{ incident.ID }}" style="cursor: pointer;">
-    <td>{{ row_number }}</td>
-    <td>{{ incident.ID }}</td>
-    <td>{{ incident.Identifier }}</td>
-    <td>{{ incident.IncidentUser|extract_after_colon }}</td>
-    <td>{{ incident.DateIncident|date:"d/m/Y" }}</td>
-    <td>{{ incident.DateEndCO|date:"d/m/Y" }}</td>
-    <td>{{ incident.IncUserText2|extract_after_colon }}</td>
-    <td>{{ incident.IncidentDescription }}</td>
-    <td>{{ incident.TreeName }}</td>
+    <td class="table-data">{{ row_number }}</td>
+    <td class="table-data">{{ incident.ID }}</td>
+    <td class="table-data">{{ incident.Identifier }}</td>
+    <td class="table-data">{{ incident.IncidentUser|extract_after_colon }}</td>
+    <td class="table-data">{{ incident.DateIncident|date:"d/m/Y" }}</td>
+    <td class="table-data">{{ incident.DateEndCO|date:"d/m/Y" }}</td>
+    <td class="table-data">{{ incident.IncUserText2|extract_after_colon }}</td>
+    <td class="table-data">{{ incident.IncidentDescription }}</td>
+    <td class="table-data">{{ incident.TreeName }}</td>
 </tr>
