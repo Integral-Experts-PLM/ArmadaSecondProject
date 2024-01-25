@@ -5,8 +5,56 @@
 <!-- {% load custom_filters %}  -->
 
 {% block content %}
+<style>
+    .spinner-container {
+        position: absolute;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 40%;
+        height: 20%;
+        z-index: 10;
+        background-color: white;
+        padding-top: 20px;
+    }
 
-<div class="container">
+    .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 10px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .spinner-message {
+        color: #3498db;
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container" style="display: flex; justify-content: center; align-items: center;">
+
+        <div class="spinner-container" id="spinner-container">
+            <div class="spinner"></div>
+            <p class="spinner-message">Downloading...</p>
+        </div>
+
     <div class="table-container">
         <table style="table-layout: fixed;
         width: 100%;">
@@ -56,10 +104,51 @@
         </div>
 
         <!-- Formulario para la exportacion a excel -->
-        <form action="{% url 'export_incidents' %}" method="get" class="export-form-button">
-            <button type="submit">Exportar a Excel</button>
+        <form action="{% url 'export_incidents' %}" method="get" class="export-form-button" id="export-form">
+            <button type="submit" id="export-excel-button">Exportar a Excel</button>
         </form>
     </div>
 </div>
+<script src="{% static 'js/dynamicSelectors.js' %}"></script>
+
+<script>
+    const spinnerContainer = document.getElementById("spinner-container");
+    const exportForm = document.getElementById("export-form");
+    const exportButton = document.getElementById("export-excel-button");
+
+    // Function to show the spinner with a text message
+    function showSpinner(container) {
+        container.style.display = 'flex';
+        exportButton.disabled = true;
+    }
+
+    // Function to hide the spinner
+    function hideSpinner(container) {
+        container.style.display = 'none';
+        exportButton.disabled = false;
+    }
+
+    exportForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        showSpinner(spinnerContainer);
+
+        fetch(exportForm.action, {
+            method: exportForm.method,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+                    hideSpinner(spinnerContainer);
+                } else {
+                    throw new Error('Download failed');
+                }
+            })
+            .catch((error) => {
+                console.error("Error during download:", error);
+            });
+    });
+</script>
 
 {% endblock %}

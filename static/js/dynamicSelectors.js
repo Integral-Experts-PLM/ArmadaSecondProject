@@ -6,6 +6,7 @@
     const treeItemIdSelect = document.getElementById('tree_item_id');
     const incidentIdSelect = document.getElementById('inc_id');
     const treeItemNameSelect = document.getElementById('tree_item_name');
+    const spinnerContainer = document.getElementById("spinner-container");
 
     if (projectIdSelect) {
       projectIdSelect.addEventListener('change', handleProjectChange);
@@ -23,6 +24,7 @@
       });
     }
 
+    // Function to get the CSRF token from cookies
     function getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {

@@ -2,14 +2,42 @@
 {% load custom_filters %}
 {% load static %}
 {% block content %}
+<style>
+.create-confirmation-popup-container {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 40%;
+  height: 20%;
+  z-index: 10;
+  background-color: white;
+  padding-top: 20px;
+}
 
-<form method="POST">
-  {% csrf_token %}
-  <div style="display: flex; flex-direction: column; align-items: center; margin: 0px 20px 0px 20px;">
+.create-confirmation-popup-message {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+</style>
+
+<div style="padding: 0 20px 0 20px; display: flex; justify-content: center; align-items: center;">
+
+  <div class="create-confirmation-popup-container" id="create-confirmation-popup-container" hidden>
+    <p class="create-confirmation-popup-message">Create done</p>
+    <button class="create-incident-button" id="popup-ok-button" onclick="closePopup()">Close</button>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" id="create-form">
+    {% csrf_token %}
     <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
-      <div class="main-input-container">
-        <h3 class="title-input-container">Crear Nuevo Incidente</h3>
-        <div style="display: flex; justify-content: center; width: 100%;">
+
+      <div>
+        <div class="main-input-container">
+          <h3 class="title-input-container">Atributos del Equipo</h3>
           <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
             <div class="input-container">
               <label for="project_id" class="input-label">Clase</label>
@@ -29,39 +57,32 @@
             </div>
             <input type="hidden" id="system_name" name="system_name" value="">
             <div class="input-container">
-              <label class="input-label">Buque</label>
+              <label class="input-label">Buque afetado por fallo</label>
               <select id="configuration_id" name="configuration_id" class="input-box" disabled>
                 <option value="">Selecione Buque</option>
               </select>
               <input type="hidden" id="configuration_name" name="configuration_name" value="">
             </div>
-            <div
-              style="display: flex; justify-content: end; margin-bottom: 10px; border: 1px solid gray; padding: 10px 10px 0 0;">
-              <div>
-                <div class="input-container">
-                  <label class="input-label" style="width: auto;">MFD</label>
-                  <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
-                  <input type="hidden" value="" class="input-box" name="" disabled />
-                </div>
-                <div class="input-container">
-                  <label class="input-label" style="width: auto;">HSC</label>
-                  <input type="text" value="" class="input-box" style="width: 143px;" name="">
-                  <input type="hidden" value="" class="input-box" name="" disabled />
-                </div>
-              </div>
-              <div style="display: flex; padding-bottom: 10px; margin-left: 10px;">
-                <button onclick="" class="button" style="padding-left: 5px; padding-right: 5px;">Asociar HSC</button>
-              </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">MFD</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" />
+              <input type="hidden" value="" class="input-box" name="" disabled />
             </div>
             <div class="input-container">
-              <label class="input-label">Nombre del equipo afectado por fallo</label>
-              <input type="text" value="{{ create_incident_form.name }}" class="input-box"
-                name="person_incident_entry" />
+              <label class="input-label">HSC</label>
+              <select id="" name="" class="input-box" disabled>
+                <option value="">Selecione HSC</option>
+              </select>
+              <input type="hidden" id="" name="" value="">
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Nombre del equipo afectado por fallo</label>
+              <textarea name="person_incident_entry" rows="4" class="input-box" style="width: 143px;"
+                value="{{ create_incident_form.name }}" disabled></textarea>
             </div>
             <div class="input-container">
               <label class="input-label" for="user_text22_failure_detection_situation">Situación del equipo a la
-                deteccion
-                del fallo</label>
+                deteccion del fallo</label>
               <select id="user_text22_failure_detection_situation" name="user_text22_failure_detection_situation"
                 class="input-box">
                 <option value="">Selecione situación</option>
@@ -72,8 +93,7 @@
             </div>
             <div class="input-container">
               <label class="input-label" for="user_text23_failure_buque_situation">Situación del buque a la detección
-                del
-                fallo</label>
+                del fallo</label>
               <select id="user_text23_failure_buque_situation" name="user_text23_failure_buque_situation"
                 class="input-box">
                 <option value="">Selecione situación</option>
@@ -82,81 +102,192 @@
                 <option value="immobilized">En inmovilización</option>
               </select>
             </div>
-          </div>
-
-          <div
-            style="height: 300px; display: flex; align-items: center; justify-content: center; margin: 0 60px 0 60px;">
-            <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: 100%;">
-          </div>
-
-          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
-            <div class="input-container" style="justify-content: flex-start;">
+            <div class="input-container">
+              <label class="input-label" for="user_text24_failure_effect_item">Efecto del fallo sobre el equipo</label>
               <select id="user_text24_failure_effect_item" name="user_text24_failure_effect_item" class="input-box">
                 <option value="">Selecione efecto</option>
                 <option value="inoperative">Equipo inoperativo</option>
                 <option value="degraded">Equipo degradado</option>
                 <option value="non effect">Sin efecto sobre equipo</option>
               </select>
-              <label class="input-label" for="user_text24_failure_effect_item" style=" margin-left: 10px;">Efecto del
-                fallo sobre el equipo</label>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Instalación afectada</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Local</label>
+              <textarea name="" rows="4" class="input-box" style="width: 143px;" value="" disabled></textarea>
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Tipo ECS</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">NSM</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Part number</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Serial number</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">NCAGE</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label" style="width: auto;">Fabricante</label>
+              <input type="text" value="" class="input-box" style="width: 143px;" name="" disabled />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div></div>
+        <div
+          style="height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 60px 0 60px;">
+          <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: 100%;">
+          <div class="input-container">
+            <input type="text" value="" class="input-box" style="width: auto" name="" disabled />
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; padding-bottom: 20px;">
+          <input type="submit" value="Crear Incidente" class="create-incident-button" id="create-incident-button">
+        </div>
+      </div>
+
+      <div>
+        <div class="main-input-container">
+          <h3 class="title-input-container">Atributos de Incidencia</h3>
+          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
+            <div class="input-container">
+              <label class="input-label" for="user_text25_failure_evidence">Evidencia del fallo</label>
               <select id="user_text25_failure_evidence" name="user_text25_failure_evidence" class="input-box">
                 <option value="">Selecione evidencia</option>
                 <option value="visible">Visible</option>
                 <option value="hidden">Oculto</option>
               </select>
-              <label class="input-label" style=" margin-left: 10px;" for="user_text25_failure_evidence">Evidencia del
-                fallo</label>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
+            <div class="input-container">
+              <label class="input-label">Fecha en la que se produce o se detecta el fallo</label>
               <input type="date" value="{{ create_incident_form.occurrence_date.value|default:''|date:'Y-m-d' }}"
                 class="input-box" name="occurrence_date" id="occurrence_date" />
-              <label class="input-label" style=" margin-left: 10px;">Fecha en la que se produce o se detecta el
-                fallo</label>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
-              <input type="text" value="" class="input-box" name="occurrence_time" id="occurrence_time" />
-              <label class="input-label" style=" margin-left: 10px;">Hora en la que se procuce o detecta el
-                fallo</label>
+            <div class="input-container">
+              <label class="input-label">Hora en la que se procuce o detecta el fallo</label>
+              <input type="time" value="" class="input-box" name="occurrence_time" id="occurrence_time" />
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
-              <input type="text" value="{{ create_incident_form.user }}" class="input-box"
-                name="user_text26_user_failure_detection" />
-              <label class="input-label" style=" margin-left: 10px;">Persona que detecta el fallo</label>
+            <div class="input-container">
+              <label class="input-label">Descripción del fallo</label>
+              <textarea name="" rows="4" class="input-box" style="width: 143px;" value="" disabled></textarea>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
+            <div class="input-container">
+              <label class="input-label">Persona/Organismo que detecta el fallo</label>
               <input type="text" value="" class="input-box" name="" />
-              <label class="input-label" style=" margin-left: 10px;">Instalación afectada</label>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
+            <div class="input-container">
+              <label class="input-label">Persona de contacto</label>
               <input type="text" value="" class="input-box" name="" />
-              <label class="input-label" style=" margin-left: 10px;">Local</label>
             </div>
-            <div class="input-container" style="justify-content: flex-start;">
-              <input type="text" value="" class="input-box" name="" />
-              <label class="input-label" style=" margin-left: 10px;">Nº Parte de mantenimiento</label>
+            <div class="input-container">
+              <label class="input-label">Persona que registra el fallo</label>
+              <input type="text" value="" class="input-box" name="" disabled />
             </div>
           </div>
         </div>
-        <div class="input-container" style="width: 100%; margin-top: 20px;">
-          <label class="input-label" style="width: 140px; text-align: right;">Descripción del fallo</label>
-          <textarea name="description_incident" rows="6" class="input-box" style="width: 100%; text-align: left;"
-            value="">
-  </textarea>
+
+        <div class="main-input-container">
+          <h3 class="title-input-container">Atributos del PMM</h3>
+          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: auto;">
+            <div class="input-container" style="padding-right: 230px;">
+              <label for="pmmCheckbox" class="input-label">PMM</label>
+              <input type="checkbox" value="" name="pmmCheckbox">
+            </div>
+            <div class="input-container">
+              <label class="input-label">Nº PMM</label>
+              <input type="text" value="" class="input-box" name="" />
+            </div>
+            <div class="input-container">
+              <label class="input-label">Estado PMM</label>
+              <input type="text" value="" class="input-box" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label">Precedencia PMM</label>
+              <input type="text" value="" class="input-box" name="" disabled />
+            </div>
+            <div class="input-container" style="padding-right: 230px;">
+              <label for="varop" class="input-label">VAROP</label>
+              <input type="checkbox" value="" name="varop">
+            </div>
+            <div class="input-container">
+              <label class="input-label">Código VAROP</label>
+              <input type="text" value="" class="input-box" name="" disabled />
+            </div>
+            <div class="input-container">
+              <label class="input-label">Riesgo SEGOP PMM</label>
+              <input type="text" value="" class="input-box" name="" disabled />
+            </div>
+          </div>
         </div>
-        <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
-          <label class="input-label" style="width: 122px; text-align: right;">Attachments</label>
-          <input type="file"
-            value="{% if incident_data %}{{ incident_data.AttachmentsIncidents }}{% else %}{{ incident_details_form.attachments_incidents.value|default:'' }}{% endif %}"
-            class="input-box" style="width: 280px;" name="attachments_incidents" />
+
+        <div class="main-input-container">
+          <h3 class="title-input-container">Adjunto de Creación de Incidente </h3>
+          <div class="input-container">
+            <input type="file" class="input-box" style="width: 100%;" name="attachments_incidents" />
+          </div>
         </div>
       </div>
+
     </div>
-    <div style="display: flex; justify-content: center; padding-bottom: 20px;">
-      <input class="create-incident-button" type="submit" value="Crear Incidente">
-    </div>
-  </div>
-</form>
+  </form>
+  <!-- <button onclick="openPopup()">popup</button> -->
+</div>
 <script src="{% static 'js/dynamicSelectors.js' %}"></script>
+
+<script>
+  const createConfirmationPopupContainer = document.getElementById('create-confirmation-popup-container');
+  const createForm = document.getElementById("create-form");
+  const createButton = document.getElementById("create-incident-button");
+  const popupOkButton = document.getElementById("popup-ok-button");
+
+  // Function to open the create-confirmation-popup-container
+  function openPopup(container) {
+    container.style.display = 'flex';
+    createButton.disabled = true;
+  }
+
+  // Function to close the create-confirmation-popup-container
+  function closePopup() {
+    createConfirmationPopupContainer.style.display = 'none';
+    createButton.disabled = false;
+  }
+
+  createForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    openPopup(createConfirmationPopupContainer);
+
+    // fetch(createForm.action, {
+    //   method: createForm.method,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       openPopup(createConfirmationPopupContainer);
+    //     } else {
+    //       throw new Error('Creation failed');
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error during creation:", error);
+    //   });
+  });
+</script>
+
 {% endblock %}

@@ -116,7 +116,9 @@ input[type="checkbox"]:checked {
 
 .filter_row {
   background-color: #abbec7;
+  text-align: center;
   vertical-align: middle;
+  border: solid 1px #ccc;
 }
 
 .col-name-row {
@@ -256,7 +258,6 @@ text-overflow: ellipsis;
   justify-content: center;
   align-items: center;
   height: 60px;
-  border-top: 1px solid #ccc;
 }
 
 .pagination-container {
@@ -292,3 +293,90 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: white;
 }
+
+/* =============== table_selector.html ================================ */
+
+.custom-table-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-dropdown-toggle {
+  background-color: #f6f6f6;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-dropdown-toggle .caret {
+  margin-left: 5px;
+}
+
+.custom-dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.custom-dropdown-item {
+  color: black;
+  padding: 5px 0;
+  text-decoration: none;
+  display: block;
+}
+
+.custom-dropdown-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.custom-table-selector:hover .custom-dropdown-menu {
+  display: block;
+}
+
+.custom-dropdown-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+    
+.custom-dropdown-item input[type="checkbox"] {
+  display: none;
+}
+    
+.checkbox-custom {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+}
+    
+.checkbox-custom:after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #343a41;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+    
+.custom-dropdown-item input[type="checkbox"]:checked + .checkbox-custom:after {
+  display: block;
+}
+    
+.label-text {
+  margin-left: 5px;
+}
+
